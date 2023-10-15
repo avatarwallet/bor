@@ -4,6 +4,7 @@ chain = "mainnet"
 # vmdebug = false
 datadir = "/var/lib/bor/data"
 # ancient = ""
+# db.engine = "leveldb"
 # keystore = ""
 # "rpc.batchlimit" = 100
 # "rpc.returndatalimit" = 100000
@@ -31,6 +32,7 @@ gcmode = "archive"
     # netrestrict = ""
     # nodekey = ""
     # nodekeyhex = ""
+    # txarrivalwait = "500ms"
     # [p2p.discovery]
         # v5disc = false
         # bootnodes = []
@@ -65,6 +67,7 @@ gcmode = "archive"
     # etherbase = ""
     # extradata = ""
     # recommit = "2m5s"
+    # commitinterrupt = true
 
 [jsonrpc]
     ipcpath = "/var/lib/bor/bor.ipc"
@@ -73,6 +76,7 @@ gcmode = "archive"
     # evmtimeout = "5s"
     # txfeecap = 5.0
     # allow-unprotected-txs = false
+    # enabledeprecatedpersonal = false
     [jsonrpc.http]
         enabled = true
         port = 8545
