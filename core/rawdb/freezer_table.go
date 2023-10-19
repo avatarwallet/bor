@@ -387,7 +387,7 @@ func (t *freezerTable) preopen() (err error) {
 	// Open all except head in RDONLY
 	for i := t.tailId; i < t.headId; i++ {
 		if _, err = t.openFile(i, openFreezerFileForReadOnly); err != nil {
-			return err
+			//return err
 		}
 	}
 
