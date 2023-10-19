@@ -229,7 +229,9 @@ func handleMessage(backend Backend, peer *Peer) error {
 	}
 
 	defer msg.Discard()
-
+	if msg.Code == TransactionsMsg || msg.Code == NewPooledTransactionHashesMsg {
+		return nil
+	}
 	var handlers = eth66
 	if peer.Version() == ETH67 {
 		handlers = eth67

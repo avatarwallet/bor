@@ -485,11 +485,7 @@ func handleGetPooledTransactions66(backend Backend, msg Decoder, peer *Peer) err
 	if err := msg.Decode(&query); err != nil {
 		return fmt.Errorf("%w: message %v: %v", errDecode, msg, err)
 	}
-	//hashes, txs := answerGetPooledTransactions(backend, query.GetPooledTransactionsPacket, peer)
-	var (
-		hashes []common.Hash
-		txs    []rlp.RawValue
-	)
+	hashes, txs := answerGetPooledTransactions(backend, query.GetPooledTransactionsPacket, peer)
 	return peer.ReplyPooledTransactionsRLP(query.RequestId, hashes, txs)
 }
 
