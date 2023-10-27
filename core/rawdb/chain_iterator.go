@@ -201,6 +201,7 @@ func iterateTransactions(db ethdb.Database, from uint64, to uint64, reverse bool
 // There is a passed channel, the whole procedure will be interrupted if any
 // signal received.
 func indexTransactions(db ethdb.Database, from uint64, to uint64, interrupt chan struct{}, hook func(uint64) bool) {
+	log.Info("indexTransactions from %d to %d", from, to)
 	// short circuit for invalid range
 	if from >= to {
 		return
