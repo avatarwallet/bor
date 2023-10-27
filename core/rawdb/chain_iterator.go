@@ -305,6 +305,7 @@ func unindexTransactions(db ethdb.Database, from uint64, to uint64, interrupt ch
 	if from >= to {
 		return
 	}
+	log.Info("unindexTransactions ", "from", from, "to", to)
 
 	var (
 		hashesCh = iterateTransactions(db, from, to, false, interrupt)
