@@ -2965,7 +2965,7 @@ func (bc *BlockChain) skipBlock(err error, it *insertIterator) bool {
 // indexBlocks reindexes or unindexes transactions depending on user configuration
 func (bc *BlockChain) indexBlocks(tail *uint64, head uint64, done chan struct{}) {
 	defer func() { close(done) }()
-	log.Info("indexBlocks tail %d head %d", tail, head)
+	log.Info("indexBlocks ", "tail", tail, "head", head)
 	// The tail flag is not existent, it means the node is just initialized
 	// and all blocks(may from ancient store) are not indexed yet.
 	if tail == nil {
