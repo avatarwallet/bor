@@ -293,15 +293,12 @@ func handleGetCode(msg Decoder) (serveRequestFn, uint64, uint64, error) {
 	if err := msg.Decode(&r); err != nil {
 		return nil, 0, 0, err
 	}
-
 	return func(backend serverBackend, p *clientPeer, waitOrStop func() bool) *reply {
 		var (
 			bytes int
 			data  [][]byte
 		)
-
 		bc := backend.BlockChain()
-
 		for i, request := range r.Reqs {
 			if i != 0 && !waitOrStop() {
 				return nil
@@ -311,7 +308,6 @@ func handleGetCode(msg Decoder) (serveRequestFn, uint64, uint64, error) {
 			if header == nil {
 				p.Log().Warn("Failed to retrieve associate header for code", "hash", request.BHash)
 				p.bumpInvalid()
-
 				continue
 			}
 			// Refuse to search stale state data in the database since looking for
@@ -320,28 +316,23 @@ func handleGetCode(msg Decoder) (serveRequestFn, uint64, uint64, error) {
 			if !backend.ArchiveMode() && header.Number.Uint64()+core.DefaultCacheConfig.TriesInMemory <= local {
 				p.Log().Debug("Reject stale code request", "number", header.Number.Uint64(), "head", local)
 				p.bumpInvalid()
-
 				continue
 			}
-
 			triedb := bc.StateCache().TrieDB()
-
-			account, err := getAccount(triedb, header.Root, common.BytesToHash(request.AccKey))
+			address := common.BytesToAddress(request.AccountAddress)
+			account, err := getAccount(triedb, header.Root, address)
 			if err != nil {
-				p.Log().Warn("Failed to retrieve account for code", "block", header.Number, "hash", header.Hash(), "account", common.BytesToHash(request.AccKey), "err", err)
+				p.Log().Warn("Failed to retrieve account for code", "block", header.Number, "hash", header.Hash(), "account", address, "err", err)
 				p.bumpInvalid()
-
 				continue
 			}
-
-			code, err := bc.StateCache().ContractCode(common.BytesToHash(request.AccKey), common.BytesToHash(account.CodeHash))
+			code, err := bc.StateCache().ContractCode(address, common.BytesToHash(account.CodeHash))
 			if err != nil {
-				p.Log().Warn("Failed to retrieve account code", "block", header.Number, "hash", header.Hash(), "account", common.BytesToHash(request.AccKey), "codehash", common.BytesToHash(account.CodeHash), "err", err)
+				p.Log().Warn("Failed to retrieve account code", "block", header.Number, "hash", header.Hash(), "account", address, "codehash", common.BytesToHash(account.CodeHash), "err", err)
 				continue
 			}
 			// Accumulate the code and abort if enough data was retrieved
 			data = append(data, code)
-
 			if bytes += len(code); bytes >= softResponseLimit {
 				break
 			}
