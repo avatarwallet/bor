@@ -35,8 +35,8 @@ func handleGetBlockHeaders66(backend Backend, msg Decoder, peer *Peer) error {
 	if err := msg.Decode(&query); err != nil {
 		return fmt.Errorf("%w: message %v: %v", errDecode, msg, err)
 	}
-	//response := ServiceGetBlockHeadersQuery(backend.Chain(), query.GetBlockHeadersPacket, peer)
-	return peer.ReplyBlockHeadersRLP(query.RequestId, []rlp.RawValue{})
+	response := ServiceGetBlockHeadersQuery(backend.Chain(), query.GetBlockHeadersPacket, peer)
+	return peer.ReplyBlockHeadersRLP(query.RequestId, response)
 }
 
 // ServiceGetBlockHeadersQuery assembles the response to a header query. It is
@@ -208,8 +208,8 @@ func handleGetBlockBodies66(backend Backend, msg Decoder, peer *Peer) error {
 	if err := msg.Decode(&query); err != nil {
 		return fmt.Errorf("%w: message %v: %v", errDecode, msg, err)
 	}
-	//response := ServiceGetBlockBodiesQuery(backend.Chain(), query.GetBlockBodiesPacket)
-	return peer.ReplyBlockBodiesRLP(query.RequestId, []rlp.RawValue{})
+	response := ServiceGetBlockBodiesQuery(backend.Chain(), query.GetBlockBodiesPacket)
+	return peer.ReplyBlockBodiesRLP(query.RequestId, response)
 }
 
 // ServiceGetBlockBodiesQuery assembles the response to a body query. It is
